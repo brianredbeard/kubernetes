@@ -20,7 +20,7 @@
 REGISTRY?=gcr.io/google_containers
 ARCH?=amd64
 TEMP_DIR:=$(shell mktemp -d)
-CNI_RELEASE=137b4975ecab6e1f0c24c1e3c228a50a3cfba75e
+CNI_RELEASE=0.5.2
 
 UNAME_S:=$(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
@@ -100,7 +100,8 @@ else
 	curl -sSL --retry 5 https://github.com/multiarch/qemu-user-static/releases/download/v2.5.0/x86_64_qemu-${QEMUARCH}-static.tar.xz | tar -xJ -C ${TEMP_DIR}
 endif
 	# Download CNI
-	curl -sSL --retry 5 https://storage.googleapis.com/kubernetes-release/network-plugins/cni-${ARCH}-${CNI_RELEASE}.tar.gz | tar -xz -C ${TEMP_DIR}/cni-bin
+	#curl -sSL --retry 5 https://storage.googleapis.com/kubernetes-release/network-plugins/cni-${ARCH}-${CNI_RELEASE}.tar.gz | tar -xz -C ${TEMP_DIR}/cni-bin
+	curl -sSL --retry 5 https://github.com/containernetworking/cni/releases/download/v${CNI_RELEASE}/cni-${ARCH}-v${CNI_RELEASE}.tgz | tar -xz -C ${TEMP_DIR}/cni-bin
 	curl -sSL --retry 5 -o  ${TEMP_DIR}/cni-bin/bin/calico https://github.com/projectcalico/calico-cni/releases/download/v1.8.0/calico
 	chmod +x ${TEMP_DIR}/cni-bin/bin/calico
 
